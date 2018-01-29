@@ -82,7 +82,7 @@ public class DrawUtils {
         Paint paint = new Paint();
         //去锯齿
         paint.setAntiAlias(true);
-        paint.setColor(Color.BLUE);
+        paint.setColor(ColorUtil.COLOR_SHADOW);
         paint.setStyle(Paint.Style.FILL);
         paint.setShader(mShasder);
         for(int i = 1; i < points.length / 4; i++) {
@@ -131,7 +131,7 @@ public class DrawUtils {
         Paint p = new Paint();
         p.setAntiAlias(true);
         p.setColor(color);
-        p.setStrokeWidth(4.0f);
+        p.setStrokeWidth(2.0f);
         canvas.drawLines(getLines(prices, xUnit, height, max, min, fromZero, y, xOffset), p);
         p.reset();
     }

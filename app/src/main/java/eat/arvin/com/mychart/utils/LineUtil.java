@@ -225,7 +225,6 @@ public class LineUtil {
                         CMinute temp = (CMinute) beforeObject.clone();
                         temp.setTime(beforeObject.getTime() + ((j + 1) * 60));
                         temp.setCount(0);
-                        temp.setMoney(0);
                         int tempMin = beforeMin + (j + 1);
                         if (morningStopMin > 0) {
                             //有停盘点
@@ -297,14 +296,6 @@ public class LineUtil {
             }
         });
         return fsDatasTemp;
-    }
-
-    //是否白盘和夜盘一起显示
-    public static boolean hasNight(String duration) {
-        if (duration.contains("|")) {
-            return duration.split("\\|").length == 3;
-        }
-        return false;
     }
 
     /**

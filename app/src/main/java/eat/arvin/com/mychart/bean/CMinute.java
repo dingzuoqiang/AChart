@@ -21,7 +21,6 @@ public class CMinute implements Cloneable, Serializable, Parcelable {
 	public double average ;
 	//涨跌幅
 	public double rate ;
-	public double money ;
 	public long getTime() {
 		return time;
 	}
@@ -69,14 +68,6 @@ public class CMinute implements Cloneable, Serializable, Parcelable {
 		this.rate = rate;
 	}
 
-	public double getMoney() {
-		return money;
-	}
-
-	public void setMoney(double money) {
-		this.money = money;
-	}
-
 	public Object clone() {
 		CMinute o = null;
 		try {
@@ -100,7 +91,6 @@ public class CMinute implements Cloneable, Serializable, Parcelable {
 		dest.writeLong(this.count);
 		dest.writeDouble(this.average);
 		dest.writeDouble(this.rate);
-		dest.writeDouble(this.money);
 	}
 
 	public CMinute() {
@@ -112,7 +102,6 @@ public class CMinute implements Cloneable, Serializable, Parcelable {
 		this.count = in.readLong();
 		this.average = in.readDouble();
 		this.rate = in.readDouble();
-		this.money = in.readDouble();
 	}
 
 	public static final Creator<CMinute> CREATOR = new Creator<CMinute>() {

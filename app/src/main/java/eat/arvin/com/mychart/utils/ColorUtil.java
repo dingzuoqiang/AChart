@@ -10,45 +10,39 @@ import eat.arvin.com.mychart.bean.StickData;
  * Created by Administrator on 2016/8/25.
  */
 public class ColorUtil {
-    //资金超大单线颜色
-    public static final int COLOR_ZJ_SUPER = Color.parseColor("#FF9966");
-    //资金大单线颜色
-    public static final int COLOR_ZJ_BIG = Color.parseColor("#FF0000");
-    //资金中单线颜色
-    public static final int COLOR_ZJ_MIDDLE = Color.parseColor("#999900");
-    //资金超小线颜色
-    public static final int COLOR_ZJ_SMALL = Color.parseColor("#0099FF");
+
+//    <color name="chart_info_color">#88000000</color>
+//    <color name="chart_info_text_color">#ffffff</color>
+//    <color name="chart_no_data_color">#be945c</color>
+//    <color name="highlight_color">#be945c</color>
+
+    // 坐标轴 lable 颜色
+    public static final int AXIS_COLOR = Color.parseColor("#999999");
+    // 中间 极限线
+    public static final int LIMIT_COLOR = Color.parseColor("#AFAFAF");
+    // 阴影层
+    public static final int COLOR_SHADOW = Color.parseColor("#D4E8F1");
+
     //跌颜色
-    public static final int COLOR_GREEN = Color.parseColor("#1aaa0f");
+    public static final int COLOR_GREEN = Color.parseColor("#E8003F");
     //涨颜色
-    public static final int COLOR_RED = Color.parseColor("#ff4c52");
+    public static final int COLOR_RED = Color.parseColor("#0B841A");
+
     //平灰
     public static final int COLOR_PING_ASH = Color.parseColor("#333333");
     //平白
     public static final int COLOR_PING_WHITE = Color.parseColor("#efefef");
     //5均线颜色
-    public static final int COLOR_SMA5 = Color.parseColor("#f2cfa9");
+    public static final int COLOR_SMA5 = Color.parseColor("#43556D");
     //10均线颜色
-    public static final int COLOR_SMA10 = Color.parseColor("#687cd5");
+    public static final int COLOR_SMA10 = Color.parseColor("#D8C02C");
     //20均线颜色
     public static final int COLOR_SMA20 = Color.parseColor("#e9837e");
-    //MACD指标DIF颜色
-    public static final int COLOR_DIF = Color.parseColor("#85d6f0");
-    //MACD指标DEA颜色
-    public static final int COLOR_DEA = Color.parseColor("#fea044");
-    //MACD指标MACD字体颜色
-    public static final int COLOR_MACD = Color.parseColor("#e27bda");
-    //KDJ指标K颜色
-    public static final int COLOR_KDJ_K = COLOR_DIF;
-    //KDJ指标D颜色
-    public static final int COLOR_KDJ_D = COLOR_DEA;
-    //KDJ指标J颜色
-    public static final int COLOR_KDJ_J = Color.parseColor("#e27bda");
 
     //分时线价格颜色
-    public static final int COLOR_PRICE_LINE = Color.parseColor("#3483e9");
+    public static final int COLOR_PRICE_LINE = Color.parseColor("#308BBA");
     //分时线均线颜色
-    public static final int COLOR_SMA_LINE = Color.parseColor("#df8925");
+    public static final int COLOR_SMA_LINE = Color.parseColor("#FED100");
     public static final int COLOR_CROSS_LINE = Color.parseColor("#2e68b2");
 
 
