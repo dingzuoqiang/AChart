@@ -37,29 +37,6 @@ public class StickData implements Parcelable {
     private double sma10;
     //20段均线
     private double sma20;
-    //量5段均线
-    private double countSma5;
-    //量10段均线
-    private double countSma10;
-    //MACD的三个参数
-    private double dif;//线
-    private double dea;//线
-    private double macd;//柱状
-    //KDJ的三根线
-    private double k;
-    private double d;
-    private double j;
-    //计算K时需要
-    private double rsv;
-    //K线资金
-    //超大单净值
-    private double sp;
-    //大单净值
-    private double bg;
-    //中单净值
-    private double md;
-    //小单净值
-    private double sm;
 
     public StickData() {
     }
@@ -200,78 +177,6 @@ public class StickData implements Parcelable {
         this.sma20 = sma20;
     }
 
-    public double getCountSma5() {
-        return countSma5;
-    }
-
-    public void setCountSma5(double countSma5) {
-        this.countSma5 = countSma5;
-    }
-
-    public double getCountSma10() {
-        return countSma10;
-    }
-
-    public void setCountSma10(double countSma10) {
-        this.countSma10 = countSma10;
-    }
-
-    public double getDif() {
-        return dif;
-    }
-
-    public void setDif(double dif) {
-        this.dif = dif;
-    }
-
-    public double getDea() {
-        return dea;
-    }
-
-    public void setDea(double dea) {
-        this.dea = dea;
-    }
-
-    public double getMacd() {
-        return macd;
-    }
-
-    public void setMacd(double macd) {
-        this.macd = macd;
-    }
-
-    public double getK() {
-        return k;
-    }
-
-    public void setK(double k) {
-        this.k = k;
-    }
-
-    public double getD() {
-        return d;
-    }
-
-    public void setD(double d) {
-        this.d = d;
-    }
-
-    public double getJ() {
-        return j;
-    }
-
-    public void setJ(double j) {
-        this.j = j;
-    }
-
-    public double getRsv() {
-        return rsv;
-    }
-
-    public void setRsv(double rsv) {
-        this.rsv = rsv;
-    }
-
     /**
      * 是否上涨
      * @return
@@ -279,39 +184,6 @@ public class StickData implements Parcelable {
     public boolean isRise() {
         return open <= close;
     }
-
-    public double getSp() {
-        return sp;
-    }
-
-    public void setSp(double sp) {
-        this.sp = sp;
-    }
-
-    public double getBg() {
-        return bg;
-    }
-
-    public void setBg(double bg) {
-        this.bg = bg;
-    }
-
-    public double getMd() {
-        return md;
-    }
-
-    public void setMd(double md) {
-        this.md = md;
-    }
-
-    public double getSm() {
-        return sm;
-    }
-
-    public void setSm(double sm) {
-        this.sm = sm;
-    }
-
 
     @Override
     public int describeContents() {
@@ -333,19 +205,7 @@ public class StickData implements Parcelable {
         dest.writeDouble(this.sma5);
         dest.writeDouble(this.sma10);
         dest.writeDouble(this.sma20);
-        dest.writeDouble(this.countSma5);
-        dest.writeDouble(this.countSma10);
-        dest.writeDouble(this.dif);
-        dest.writeDouble(this.dea);
-        dest.writeDouble(this.macd);
-        dest.writeDouble(this.k);
-        dest.writeDouble(this.d);
-        dest.writeDouble(this.j);
-        dest.writeDouble(this.rsv);
-        dest.writeDouble(this.sp);
-        dest.writeDouble(this.bg);
-        dest.writeDouble(this.md);
-        dest.writeDouble(this.sm);
+
     }
 
     protected StickData(Parcel in) {
@@ -362,19 +222,6 @@ public class StickData implements Parcelable {
         this.sma5 = in.readDouble();
         this.sma10 = in.readDouble();
         this.sma20 = in.readDouble();
-        this.countSma5 = in.readDouble();
-        this.countSma10 = in.readDouble();
-        this.dif = in.readDouble();
-        this.dea = in.readDouble();
-        this.macd = in.readDouble();
-        this.k = in.readDouble();
-        this.d = in.readDouble();
-        this.j = in.readDouble();
-        this.rsv = in.readDouble();
-        this.sp = in.readDouble();
-        this.bg = in.readDouble();
-        this.md = in.readDouble();
-        this.sm = in.readDouble();
     }
 
     public static final Creator<StickData> CREATOR = new Creator<StickData>() {

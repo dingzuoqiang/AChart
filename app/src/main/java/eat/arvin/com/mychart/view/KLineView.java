@@ -248,18 +248,6 @@ public class KLineView extends ChartView implements ChartConstant {
         //根据当前显示的指标类型，优先计算指标
         IndexParseUtil.initSma(this.data);
 
-        //把暂时不显示的计算，放在线程中去完成，避免阻塞主线程
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                switch (indexType) {
-                    case INDEX_VOL:
-                        IndexParseUtil.initMACD(data);
-                        IndexParseUtil.initKDJ(data);
-                        break;
-                }
-            }
-        }).start();
     }
 
     @Override
@@ -275,7 +263,6 @@ public class KLineView extends ChartView implements ChartConstant {
             //注意，这个值用来区分，是否画出均线的小圆圈
             bean.y2 = -1;
             bean.timeYMD = data.getTime();
-            setIndexTexts(data, bean);
             crossView.drawLine(bean);
             if(crossView.getVisibility() == GONE)
                 crossView.setVisibility(VISIBLE);
@@ -296,25 +283,4 @@ public class KLineView extends ChartView implements ChartConstant {
     }
 
 
-    /**
-     * 设置指标左上角的文字
-     * @param data
-     * @param bean
-     */
-    private void setIndexTexts(StickData data, CrossBean bean) {
-        switch (indexType) {
-            case INDEX_VOL:
-                bean.indexText = new String[3];
-                bean.indexText[0] = "VOL:" + data.getCount();
-                bean.indexText[1] = "SMA5:" + data.getCountSma5();
-                bean.indexText[2] = "SMA10:" + data.getCountSma10();
-                bean.indexColor = new int[] {
-                        data.isRise() ? ColorUtil.COLOR_RED : ColorUtil.COLOR_GREEN,
-                        ColorUtil.COLOR_SMA5,
-                        ColorUtil.COLOR_SMA10
-                };
-                break;
-        }
-
-    }
 }
