@@ -77,14 +77,14 @@ public class FenshiView extends ChartView {
     @Override
     protected void drawGrid(Canvas canvas) {
         //1,画网格
-        if(data != null && data.getParam() != null && LineUtil.isIrregular(data.getParam().getDuration())) {
-            //如果是不规则网格画不规则网格
-            GridUtils.drawIrregularGrid(canvas, mWidth, mainH, data.getParam().getDuration());
-            GridUtils.drawIrregularIndexGrid(canvas, indexStartY, mWidth, indexH, data.getParam().getDuration());
-        } else {
-            GridUtils.drawGrid(canvas, mWidth, mainH);
+//        if(data != null && data.getParam() != null && LineUtil.isIrregular(data.getParam().getDuration())) {
+//            //如果是不规则网格画不规则网格
+//            GridUtils.drawIrregularGrid(canvas, mWidth, mainH, data.getParam().getDuration());
+//            GridUtils.drawIrregularIndexGrid(canvas, indexStartY, mWidth, indexH, data.getParam().getDuration());
+//        } else {
+//            GridUtils.drawGrid(canvas, mWidth, mainH);
                  GridUtils.drawIndexGrid(canvas, indexStartY, mWidth, indexH);
-        }
+//        }
 
     }
 
@@ -101,15 +101,15 @@ public class FenshiView extends ChartView {
     @Override
     protected void drawText(Canvas canvas) {
         if(data == null) return;
-        DrawUtils.drawYPercentAndPrice(canvas, yMax, yMin, yd,mWidth, mainH);
+//        DrawUtils.drawYPercentAndPrice(canvas, yMax, yMin, yd,mWidth, mainH);
         DrawUtils.drawXTime(canvas, data.getParam().getDuration(), data.getParam().getUntil(),mWidth, mainH);
     }
 
     @Override
     protected void drawLines(Canvas canvas) {
         if(data == null) return;
-        drawAverageLine(canvas);
         drawPriceLine(canvas);
+        drawAverageLine(canvas);
     }
 
     @Override
@@ -126,26 +126,26 @@ public class FenshiView extends ChartView {
         }
     }
 
-    @Override
-    protected void drawZJ(Canvas canvas) {
-    }
-
     /**
      * 价格线
      * @param canvas
      */
     private void drawPriceLine(Canvas canvas) {
+        price = new float[minutes.size()];
+        for(int i = 0; i < minutes.size(); i++) {
+            price[i] = (float) minutes.get(i).getPrice();
+        }
         //乘以1.001是为了让上下分别空一点出来
         double[] maxAndMin = LineUtil.getMaxAndMinByYd(yMax, yMin, yd);
+        DrawUtils.drawPriceShader(canvas, price, xUnit, mainH, (float) maxAndMin[0], (float) maxAndMin[1]);
+
         DrawUtils.drawLines(canvas, price,xUnit , mainH, ColorUtil.COLOR_PRICE_LINE, (float) maxAndMin[0], (float) maxAndMin[1], false);
     }
 
 
     private void drawAverageLine(Canvas canvas) {
-        price = new float[minutes.size()];
         average = new float[minutes.size()];
         for(int i = 0; i < minutes.size(); i++) {
-            price[i] = (float) minutes.get(i).getPrice();
             average[i] = (float) minutes.get(i).getAverage();
         }
         float[] maxAndMin1 = LineUtil.getMaxAndMin(average);
@@ -198,9 +198,6 @@ public class FenshiView extends ChartView {
             case INDEX_VOL:
                 bean.indexText = new String[]{"VOL:" + cMinute.getCount()};
                 bean.indexColor = new int[]{cMinute.getPrice() > yd ? ColorUtil.COLOR_RED : ColorUtil.COLOR_GREEN};
-                break;
-            case INDEX_ZJ:
-
                 break;
         }
     }

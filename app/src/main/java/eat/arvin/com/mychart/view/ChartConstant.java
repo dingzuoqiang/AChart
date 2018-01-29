@@ -10,8 +10,6 @@ public interface ChartConstant {
      */
     int DOUBLE_TAP_DELAY = 300;
 
-    String[] INDEX_FENSHI_TAB = {"VOL", "资金"};
-    String[] INDEX_KLINE_TAB = {"VOL", "资金", "MACD", "KDJ"};
     //K线、分时图占SurfaceView的比例
     float MAIN_SCALE = 175f / 260f;
     //时间占比
@@ -31,7 +29,5 @@ public interface ChartConstant {
 
     //指标对应的下标
     int INDEX_VOL = 0;
-    int INDEX_ZJ = 1;
-    int INDEX_MACD = 2;
-    int INDEX_KDJ = 3;
+
 }

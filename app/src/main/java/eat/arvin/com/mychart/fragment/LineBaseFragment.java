@@ -14,18 +14,16 @@ import eat.arvin.com.mychart.view.ChartView;
  * Created by Arvin on 2016/10/26.
  * 分时frag和k线frag的父布局
  */
-public abstract class LineBaseFragment extends Fragment implements ChartConstant, TabLayout.OnTabSelectedListener, ChartView.OnDoubleTapListener, View.OnClickListener {
+public abstract class LineBaseFragment extends Fragment implements ChartConstant, ChartView.OnDoubleTapListener, View.OnClickListener {
     protected String cid;
     protected boolean isShow;
     //K线类型：取值为ChartConstant的TYPE_RIK等,日k月k周k等,默认为0分时图
     protected int type;
 
-    protected TabLayout indexTab;
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        indexTab = (TabLayout)getView().findViewById(R.id.cfb_index_tab);
     }
 
 
@@ -38,16 +36,6 @@ public abstract class LineBaseFragment extends Fragment implements ChartConstant
     public void setUserVisibleHint(boolean isVisibleToUser) {
         super.setUserVisibleHint(isVisibleToUser);
         isShow = isVisibleToUser;
-    }
-
-    @Override
-    public void onTabUnselected(TabLayout.Tab tab) {
-
-    }
-
-    @Override
-    public void onTabReselected(TabLayout.Tab tab) {
-
     }
 
     @Override

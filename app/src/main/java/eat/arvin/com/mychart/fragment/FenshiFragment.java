@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.annotation.Nullable;
-import android.support.design.widget.TabLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -60,10 +59,6 @@ public class FenshiFragment extends LineBaseFragment {
         super.onActivityCreated(savedInstanceState);
         findViews();
         fenshiView.setUsedViews(crossView, msgText);
-        indexTab.setOnTabSelectedListener(this);
-        for (String s : INDEX_FENSHI_TAB) {
-            indexTab.addTab(indexTab.newTab().setText(s));
-        }
         fenshiView.setDataAndInvalidate(data);
     }
 
@@ -98,17 +93,5 @@ public class FenshiFragment extends LineBaseFragment {
         super.setUserVisibleHint(isVisibleToUser);
     }
 
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        switch (tab.getPosition()) {
-            case INDEX_VOL:
-                fenshiView.showVOL();
-                break;
-            case INDEX_ZJ:
-               //TODO 显示指标资金
-                break;
-        }
-    }
 
 }

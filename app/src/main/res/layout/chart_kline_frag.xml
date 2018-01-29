@@ -28,5 +28,4 @@
             android:visibility="gone" />
     </RelativeLayout>
 
-    <include layout="@layout/chart_frag_bottom"/>
 </LinearLayout>

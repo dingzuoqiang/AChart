@@ -374,7 +374,6 @@ public class DrawUtils {
                 canvas.drawLine(xUint * i, y + (height - minutes.get(i).getCount() * yUnit), xUint * i, y + height, p);
             }
         }
-        canvas.drawText(max / 2 + "", 0, y + height / 2, p);
     }
 
     /**
@@ -394,7 +393,6 @@ public class DrawUtils {
         p.setTextSize(FENSHI_TEXT_SIZE);
         p.setColor(Color.BLACK);
         float diff = xUnit - xUnit / KLineView.WIDTH_SCALE;
-        canvas.drawText(max / 2 + "", 0, y + height / 2, p);
         for (int i = 0; i < datas.size(); i++) {
             if (datas.get(i).getCount() != 0) {
                 StickData data = datas.get(i);

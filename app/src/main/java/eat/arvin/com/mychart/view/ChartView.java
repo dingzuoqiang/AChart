@@ -107,15 +107,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
             case INDEX_VOL:
                 drawVOL(canvas);
                 break;
-            case INDEX_ZJ:
-                drawZJ(canvas);
-                break;
-            case INDEX_MACD:
-                drawMACD(canvas);
-                break;
-            case INDEX_KDJ:
-                drawKDJ(canvas);
-                break;
         }
     }
 
@@ -148,17 +139,9 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
     protected abstract void drawVOL(Canvas canvas);
 
     /**
-     * 话资金
-     * @param canvas
-     */
-    protected abstract void drawZJ(Canvas canvas);
-    /**
      *在开始画图前，初始化数据
      */
     protected abstract void init();
-
-    protected void drawMACD(Canvas canvas) {}
-    protected void drawKDJ(Canvas canvas) {}
 
     /**
      * 分时价格线均线、K线的均线
@@ -166,31 +149,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
      */
     protected void drawLines(Canvas canvas) {}
     protected void drawCandles(Canvas canvas) {}
-
-    public void showVOL() {
-        indexType = INDEX_VOL;
-        postInvalidate();
-        resetIndexText();
-
-    }
-
-    public void showZJ() {
-        indexType = INDEX_ZJ;
-        postInvalidate();
-        resetIndexText();
-    }
-
-    public void showMACD() {
-        indexType = INDEX_MACD;
-        postInvalidate();
-        resetIndexText();
-    }
-
-    public void showKDJ() {
-        indexType = INDEX_KDJ;
-        postInvalidate();
-        resetIndexText();
-    }
 
     /**
      * 十字线显示的时候，切换指标之后，让十字线显示的指标文字也切换掉

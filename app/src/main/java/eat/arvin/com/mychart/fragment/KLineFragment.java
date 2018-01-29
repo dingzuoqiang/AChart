@@ -46,10 +46,7 @@ public class KLineFragment extends LineBaseFragment {
         kLineView.setUsedViews(crossView, msgText);
         kLineView.setType(1);
         kLineView.setOnDoubleTapListener(this);
-        indexTab.setOnTabSelectedListener(this);
-        for(String s : INDEX_KLINE_TAB) {
-            indexTab.addTab(indexTab.newTab().setText(s));
-        }
+
         kLineView.setDataAndInvalidate(list);
     }
 
@@ -62,22 +59,4 @@ public class KLineFragment extends LineBaseFragment {
         return fragment;
     }
 
-
-    @Override
-    public void onTabSelected(TabLayout.Tab tab) {
-        switch (tab.getPosition()) {
-            case INDEX_VOL:
-                kLineView.showVOL();
-                break;
-            case INDEX_ZJ:
-                kLineView.showZJ();
-                break;
-            case INDEX_MACD:
-                kLineView.showMACD();
-                break;
-            case INDEX_KDJ:
-                kLineView.showKDJ();
-                break;
-        }
-    }
 }
