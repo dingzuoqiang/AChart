@@ -89,7 +89,7 @@ public class CrossView extends View {
         Paint p = new Paint();
         p.setAntiAlias(true);
         p.setColor(ColorUtil.COLOR_CROSS_LINE);
-        p.setStrokeWidth(2f);
+        p.setStrokeWidth(1f);
         p.setStyle(Paint.Style.FILL);
         //横线
         canvas.drawLine(0, bean.y, getWidth(), bean.y, p);

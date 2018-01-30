@@ -65,7 +65,7 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
     //y轴最小值
     protected double yMin;
     protected float xUnit;// 每个数据占的宽度 x轴每两点距离
-
+    protected int scale = 2;// 价格 保留2位小数
 
     public ChartView(Context context, AttributeSet attrs) {
         super(context, attrs);

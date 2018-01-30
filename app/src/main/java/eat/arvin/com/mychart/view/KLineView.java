@@ -10,6 +10,7 @@ import android.view.ScaleGestureDetector;
 
 import java.util.ArrayList;
 
+import eat.arvin.com.mychart.bean.CMinute;
 import eat.arvin.com.mychart.bean.CrossBean;
 import eat.arvin.com.mychart.bean.StickData;
 import eat.arvin.com.mychart.utils.ColorUtil;
@@ -253,7 +254,7 @@ public class KLineView extends ChartView implements ChartConstant {
                 crossView.setVisibility(VISIBLE);
            //TODO 这里显示该点数据到屏幕
             msgText.setVisibility(VISIBLE);
-            msgText.setText(Html.fromHtml(ColorUtil.getCurPriceInfo(data)));
+            msgText.setText(Html.fromHtml(getCurPriceInfo(data)));
         }
     }
 
@@ -267,5 +268,25 @@ public class KLineView extends ChartView implements ChartConstant {
         return mainH - (new Float(price) - (float)yMin) / yUnit;
     }
 
+    /**
+     * 价格信息
+     *
+     * @param entity
+     * @return
+     */
+    private String getCurPriceInfo(StickData entity) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("开:" + NumberUtil.beautifulDouble(entity.getOpen(), scale));
+        sb.append("\u3000收:" + NumberUtil.beautifulDouble(entity.getClose(), scale));
+        sb.append("\u3000高:" + NumberUtil.beautifulDouble(entity.getHigh(), scale));
+        sb.append("\u3000低:" + NumberUtil.beautifulDouble(entity.getLow(), scale));
+        sb.append("\u3000量" + entity.getCount());
+        return sb.toString();
+//        return ColorUtil.getCurPriceInfo(data);
+    }
+
+    public void setScale(int scale) {
+        this.scale = scale;
+    }
 
 }

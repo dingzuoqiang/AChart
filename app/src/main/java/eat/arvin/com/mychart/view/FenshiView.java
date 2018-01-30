@@ -16,6 +16,7 @@ import eat.arvin.com.mychart.utils.ColorUtil;
 import eat.arvin.com.mychart.utils.DrawUtils;
 import eat.arvin.com.mychart.utils.GridUtils;
 import eat.arvin.com.mychart.utils.LineUtil;
+import eat.arvin.com.mychart.utils.NumberUtil;
 
 /**
  * Created by Administrator on 2016/10/25.
@@ -256,7 +257,7 @@ public class FenshiView extends ChartView {
             bean.y2 = (float) getY(cMinute.getAverage());
             bean.price = cMinute.getPrice() + "";
             bean.time = cMinute.getTime();
-            setIndexTextAndColor(position, cMinute, bean);
+//            setIndexTextAndColor(position, cMinute, bean);
             crossView.drawLine(bean);
             if(crossView.getVisibility() == GONE)
                 crossView.setVisibility(VISIBLE);
@@ -304,7 +305,15 @@ public class FenshiView extends ChartView {
      * @param entity
      * @return
      */
-    public String getCurPriceInfo(CMinute entity) {
-        return ColorUtil.getCurPriceInfo(entity, yd);
+    private String getCurPriceInfo(CMinute entity) {
+        StringBuffer sb = new StringBuffer();
+        sb.append("价格:" + NumberUtil.beautifulDouble(entity.getPrice(), scale));
+        sb.append("\u3000\u3000成交:" + entity.getCount());
+        return sb.toString();
+//        return ColorUtil.getCurPriceInfo(entity, yd);
+    }
+
+    public void setScale(int scale) {
+        this.scale = scale;
     }
 }

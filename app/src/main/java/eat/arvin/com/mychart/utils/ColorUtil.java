@@ -43,7 +43,8 @@ public class ColorUtil {
     public static final int COLOR_PRICE_LINE = Color.parseColor("#308BBA");
     //分时线均线颜色
     public static final int COLOR_SMA_LINE = Color.parseColor("#FED100");
-    public static final int COLOR_CROSS_LINE = Color.parseColor("#2e68b2");
+    //十字线颜色
+    public static final int COLOR_CROSS_LINE = Color.parseColor("#999999");
 
 
     public static String getColorRGB(double curr, double change) {
