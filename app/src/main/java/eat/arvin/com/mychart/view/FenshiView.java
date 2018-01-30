@@ -41,6 +41,16 @@ public class FenshiView extends ChartView {
 
     @Override
     protected boolean onViewScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        if(minutes != null && drawCount < minutes.size() && Math.abs(distanceX) > DEFUALT_WIDTH) {
+            int temp = offset + (int)(0 - distanceX / DEFUALT_WIDTH);
+            if(temp < 0 || temp + drawCount > minutes.size()) {
+
+            } else {
+                offset = temp;
+                postInvalidate();
+            }
+            return true;
+        }
         return false;
     }
 
@@ -173,7 +183,12 @@ public class FenshiView extends ChartView {
     protected void drawText(Canvas canvas) {
         if(minutes == null || minutes.size() == 0) return;
 //        DrawUtils.drawYPercentAndPrice(canvas, yMax, yMin, yd,mWidth, mainH);
-        DrawUtils.drawXTime(canvas, data.getParam().getDuration(), data.getParam().getUntil(),mWidth, mainH);
+//        DrawUtils.drawXTime(canvas, data.getParam().getDuration(), data.getParam().getUntil(),mWidth, mainH);
+        if(showList.size() <= drawCount) {
+            DrawUtils.drawKLineXTime(canvas, showList.get(0).getTimeStr(), showList.get(showList.size() - 1).getTimeStr(), mWidth, mainH);
+        } else {
+            DrawUtils.drawKLineXTime(canvas, showList.get(0).getTimeStr(), null, mWidth, mainH);
+        }
     }
 
     @Override
