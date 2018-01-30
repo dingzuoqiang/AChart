@@ -89,8 +89,8 @@ public class FenshiView extends ChartView {
     @Override
     protected void init() {
         if(minutes == null) return;
-        yd = data.getParam().getLast();
-//        yd = 0;
+//        yd = data.getParam().getLast();
+
 //        xUnit = mWidth / LineUtil.getShowCount(data.getParam().getDuration());
         drawCount = (int) (mWidth / DEFUALT_WIDTH);
         candleXDistance = drawCount * WIDTH_SCALE;
@@ -101,6 +101,7 @@ public class FenshiView extends ChartView {
                 showList = new ArrayList<>();
                 showList.addAll(minutes);
             }
+            yd = showList.get(0).price;
         }
         if(showList == null) return;
 

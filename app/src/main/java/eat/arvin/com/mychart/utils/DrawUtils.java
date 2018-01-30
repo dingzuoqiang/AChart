@@ -84,7 +84,7 @@ public class DrawUtils {
         paint.setAntiAlias(true);
         paint.setColor(ColorUtil.COLOR_SHADOW);
         paint.setStyle(Paint.Style.FILL);
-        paint.setShader(mShasder);
+//        paint.setShader(mShasder);
         for(int i = 1; i < points.length / 4; i++) {
             float x1 = points[i * 4];
             float y1 = points[i * 4 + 1];
