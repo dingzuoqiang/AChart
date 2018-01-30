@@ -5,6 +5,7 @@ import android.graphics.Canvas;
 import android.text.Html;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
+import android.view.ScaleGestureDetector;
 
 import java.util.ArrayList;
 
@@ -43,10 +44,34 @@ public class FenshiView extends ChartView {
         return false;
     }
 
+    private ScaleGestureDetector mScaleGestureDetector = new ScaleGestureDetector(getContext(), new ScaleGestureDetector.SimpleOnScaleGestureListener(){
+        @Override
+        public boolean onScale(ScaleGestureDetector detector) {
+            if(minutes == null) return super.onScale(detector);
+            //放大是由1变大，缩小是由1变小
+            float scale = detector.getScaleFactor();
+            //这个变化太快，把scale变慢一点
+            scale = 1 + ((scale - 1) * 0.4f);
+            drawCount = (int) (mWidth / DEFUALT_WIDTH);
+            if(scale < 1 && drawCount >= minutes.size()) {
+                //缩小时，当缩到一屏显示完时，则不再缩小
+            } else if(scale > 1 && drawCount < 50) {
+                //放大时，当一屏少于20个时，则不再放大
+            } else {
+                DEFUALT_WIDTH = DEFUALT_WIDTH * scale;
+                invalidate();
+            }
+            return super.onScale(detector);
+        }
+    });
+
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         if (gestureDetector != null)
             gestureDetector.onTouchEvent(event);
+        if(mScaleGestureDetector != null)
+            mScaleGestureDetector.onTouchEvent(event);
         return true;
     }
 
