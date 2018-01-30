@@ -24,9 +24,9 @@ public class ColorUtil {
     public static final int COLOR_SHADOW = Color.parseColor("#D4E8F1");
 
     //跌颜色
-    public static final int COLOR_GREEN = Color.parseColor("#E8003F");
+    public static final int DECREASING_COLOR = Color.parseColor("#E8003F");
     //涨颜色
-    public static final int COLOR_RED = Color.parseColor("#0B841A");
+    public static final int INCREASING_COLOR = Color.parseColor("#0B841A");
 
     //平灰
     public static final int COLOR_PING_ASH = Color.parseColor("#333333");
@@ -53,7 +53,7 @@ public class ColorUtil {
     }
 
     /**
-     * 获取价格显示的颜色，curr>change是红，等于是黑，小于是绿
+     * 获取价格显示的颜色，curr>change是绿，等于是黑，小于是红
      * 平是灰色
      *
      * @param curr   当前价
@@ -64,24 +64,8 @@ public class ColorUtil {
         if (curr == change)
             return COLOR_PING_ASH;
         if (curr < change)
-            return COLOR_GREEN;
-        return COLOR_RED;
-    }
-
-    /**
-     * 获取价格显示的颜色，curr>change是红，等于是黑，小于是绿
-     * 平是白色
-     *
-     * @param curr   当前价
-     * @param change 变化颜色的价格
-     * @return
-     */
-    public static int getTextColorWhite(double curr, double change) {
-        if (curr == change)
-            return COLOR_PING_WHITE;
-        if (curr < change)
-            return COLOR_GREEN;
-        return COLOR_RED;
+            return DECREASING_COLOR;
+        return INCREASING_COLOR;
     }
 
     /**

@@ -24,28 +24,13 @@ import eat.arvin.com.mychart.utils.NumberUtil;
  * K线View
  */
 public class KLineView extends ChartView implements ChartConstant {
-    //烛形图加空白的宽度和烛形图宽度之比
-    public static final float WIDTH_SCALE = 1.2f;
-    //烛形图和右侧空白的宽度
-    public float DEFUALT_WIDTH = 19;
+
     //K线所有数据
     private ArrayList<StickData> data;
     //K线展示的数据
     private ArrayList<StickData> showList;
-    //一屏烛形图数量
-    private int drawCount;
-    //没两个烛形图x轴的距离
-    private float candleXDistance;
-
-    //当前画图偏移量（往右滑动之后）
-    private int offset;
-    //y轴最大值
-    protected double yMax;
-    //y轴最小值
-    protected double yMin;
 
     protected float yUnit;
-    protected float xUnit;
 
 
     public KLineView(Context context, AttributeSet attrs) {

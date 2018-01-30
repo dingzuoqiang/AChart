@@ -348,19 +348,20 @@ public class DrawUtils {
      * 画VOL线
      *
      * @param canvas
-     * @param xUint   x轴单位距离
+     * @param xUnit   x轴单位距离
      * @param y       左上y坐标
      * @param height  绘画区域高度
      * @param max     最大量
      * @param yd      昨收
      * @param minutes 量集合
      */
-    public static void drawVOLRects(Canvas canvas, float xUint, float y, float height, long max, float yd, ArrayList<CMinute> minutes) {
+    public static void drawVOLRects(Canvas canvas, float xUnit, float y, float height, long max, float yd, ArrayList<CMinute> minutes) {
         Paint p = new Paint();
         p.setAntiAlias(true);
         float yUnit = height / max;
         p.setTextSize(FENSHI_TEXT_SIZE);
         p.setColor(Color.BLACK);
+        float diff = xUnit - xUnit / KLineView.WIDTH_SCALE;
         for (int i = 0; i < minutes.size(); i++) {
             if (minutes.get(i).getCount() != 0) {
                 int color = 0;
@@ -370,8 +371,7 @@ public class DrawUtils {
                     color = ColorUtil.getTextColorAsh(minutes.get(i).getPrice() > minutes.get(i - 1).getPrice() ? 1 : -1, 0);
                 }
                 p.setColor(color);
-                p.setStrokeWidth(3f);
-                canvas.drawLine(xUint * i, y + (height - minutes.get(i).getCount() * yUnit), xUint * i, y + height, p);
+                canvas.drawRect(xUnit * i, y + (height - minutes.get(i).getCount() * yUnit), xUnit * (i + 1) - diff, y + height, p);
             }
         }
     }
@@ -423,7 +423,7 @@ public class DrawUtils {
         float diff = xUint - xUint / KLineView.WIDTH_SCALE;
         int i = 0;
         for (float f : macds) {
-            p.setColor(f > 0 ? ColorUtil.COLOR_RED : ColorUtil.COLOR_GREEN);
+            p.setColor(f > 0 ? ColorUtil.INCREASING_COLOR : ColorUtil.DECREASING_COLOR);
             if (f != 0)
                 canvas.drawRect(xUint * i + diff / 2, halfY, xUint * (i + 1) - diff / 2,halfY - f * yUnit - 1, p);
             i++;

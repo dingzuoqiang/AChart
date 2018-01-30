@@ -46,6 +46,27 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
     protected OnDoubleTapListener onDoubleTapListener;
     //十字线最后停下的点，当切换指标的时候，使用这个点来计算指标应该显示的文字
     private float lastX, lastY;
+
+    //烛形图加空白的宽度和烛形图宽度之比
+    public static final float WIDTH_SCALE = 1.2f;
+    //烛形图和右侧空白的宽度
+    protected float DEFUALT_WIDTH = 19;
+
+    //一屏烛形图数量
+    protected int drawCount;
+    //没两个烛形图x轴的距离
+    protected float candleXDistance;
+
+    //当前画图偏移量（往右滑动之后）
+    protected int offset;
+
+    //y轴最大值
+    protected double yMax;
+    //y轴最小值
+    protected double yMin;
+    protected float xUnit;// 每个数据占的宽度 x轴每两点距离
+
+
     public ChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
         //关闭硬件加速，不然虚线显示为实线了

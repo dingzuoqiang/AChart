@@ -24,16 +24,15 @@ public class FenshiView extends ChartView {
     private FenshiDataResponse data;
     //补全后的所有点
     private ArrayList<CMinute> minutes;
+    //展示的数据
+    private ArrayList<CMinute> showList;
+
     //所有价格
     private float[] price;
     //所有均线数据
     private float[] average;
     //分时线昨收
     private double yd;
-
-    private double yMax;
-    private double yMin;
-    private float xUnit;
 
     public FenshiView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -54,12 +53,25 @@ public class FenshiView extends ChartView {
 
     @Override
     protected void init() {
-        if(data == null) return;
+        if(minutes == null) return;
         yd = data.getParam().getLast();
-        xUnit = mWidth / LineUtil.getShowCount(data.getParam().getDuration());
+//        yd = 0;
+//        xUnit = mWidth / LineUtil.getShowCount(data.getParam().getDuration());
+        drawCount = (int) (mWidth / DEFUALT_WIDTH);
+        candleXDistance = drawCount * WIDTH_SCALE;
+        if(minutes != null && minutes.size() > 0) {
+            if(drawCount < minutes.size()) {
+                getShowList(offset);
+            } else {
+                showList = new ArrayList<>();
+                showList.addAll(minutes);
+            }
+        }
+        if(showList == null) return;
+
         //计算最大最小值
         boolean first = true;
-        for(CMinute c : data.getData()) {
+        for(CMinute c : showList) {
             if(first) {
                 first = false;
                 yMax = c.getPrice();
@@ -72,6 +84,7 @@ public class FenshiView extends ChartView {
             if(c.getAverage() != 0 && c.getAverage() != 0.01)
                 yMin = c.getAverage() < yMin ? c.getAverage() : yMin;
         }
+        xUnit = mWidth / drawCount;
     }
 
     @Override
@@ -95,15 +108,33 @@ public class FenshiView extends ChartView {
     public void setDataAndInvalidate(FenshiDataResponse data) {
         this.data = data;
         minutes = LineUtil.getAllFenshiData(data);
+        parseData();
+
         postInvalidate();
     }
 
-    @Override
-    protected void drawText(Canvas canvas) {
-        if(data == null) return;
-//        DrawUtils.drawYPercentAndPrice(canvas, yMax, yMin, yd,mWidth, mainH);
-        DrawUtils.drawXTime(canvas, data.getParam().getDuration(), data.getParam().getUntil(),mWidth, mainH);
+    /**
+     * 获取页面一页可展示的数据
+     */
+    private void getShowList(int offset) {
+        if(offset != 0 && minutes.size() - drawCount - offset < 0) {
+            offset = minutes.size() - drawCount;
+        }
+        showList = new ArrayList<>();
+        showList.addAll(minutes.subList(minutes.size() - drawCount - offset, minutes.size() - offset));
     }
+
+
+    /**
+     * 计算各指标
+     */
+    private void parseData() {
+        offset = 0;
+        //根据当前显示的指标类型，优先计算指标
+//        IndexParseUtil.initSma(this.data);
+
+    }
+
 
     @Override
     protected void drawLines(Canvas canvas) {
@@ -112,17 +143,25 @@ public class FenshiView extends ChartView {
         drawAverageLine(canvas);
     }
 
+
+    @Override
+    protected void drawText(Canvas canvas) {
+        if(minutes == null || minutes.size() == 0) return;
+//        DrawUtils.drawYPercentAndPrice(canvas, yMax, yMin, yd,mWidth, mainH);
+        DrawUtils.drawXTime(canvas, data.getParam().getDuration(), data.getParam().getUntil(),mWidth, mainH);
+    }
+
     @Override
     protected void drawVOL(Canvas canvas) {
-        if(data == null) return;
+        if(minutes == null || minutes.size() == 0) return;
         long max = 0;
-        for(CMinute minute : minutes) {
+        for(CMinute minute : showList) {
             max = minute.getCount() > max ? minute.getCount() : max;
         }
         //如果量全为0，则不画
         if(max != 0) {
             //2,画量线，多条竖直线
-            DrawUtils.drawVOLRects(canvas, xUnit, indexStartY, indexH, max, (float) data.getParam().getLast(), minutes);
+            DrawUtils.drawVOLRects(canvas, xUnit, indexStartY, indexH, max, (float) yd, showList);
         }
     }
 
@@ -131,9 +170,9 @@ public class FenshiView extends ChartView {
      * @param canvas
      */
     private void drawPriceLine(Canvas canvas) {
-        price = new float[minutes.size()];
-        for(int i = 0; i < minutes.size(); i++) {
-            price[i] = (float) minutes.get(i).getPrice();
+        price = new float[showList.size()];
+        for(int i = 0; i < showList.size(); i++) {
+            price[i] = (float) showList.get(i).getPrice();
         }
         //乘以1.001是为了让上下分别空一点出来
         double[] maxAndMin = LineUtil.getMaxAndMinByYd(yMax, yMin, yd);
@@ -144,9 +183,9 @@ public class FenshiView extends ChartView {
 
 
     private void drawAverageLine(Canvas canvas) {
-        average = new float[minutes.size()];
-        for(int i = 0; i < minutes.size(); i++) {
-            average[i] = (float) minutes.get(i).getAverage();
+        average = new float[showList.size()];
+        for(int i = 0; i < showList.size(); i++) {
+            average[i] = (float) showList.get(i).getAverage();
         }
         float[] maxAndMin1 = LineUtil.getMaxAndMin(average);
         //如果均线值全为0.01则不画改线，否则会影响价格线展示
@@ -166,12 +205,13 @@ public class FenshiView extends ChartView {
     @Override
     public void onCrossMove(float x, float y) {
         super.onCrossMove(x, y);
-        if(crossView == null || minutes == null) return;
-        int position = (int) Math.rint(new Double(x)/ new Double(xUnit));
-        if(position < minutes.size()) {
-            CMinute cMinute = minutes.get(position);
+        if(crossView == null || showList == null) return;
+        int position = (int) Math.rint(new Double(x)/ new Double(DEFUALT_WIDTH));
+        if(position < showList.size()) {
+            CMinute cMinute = showList.get(position);
+            float xIn = (mWidth / drawCount * position) + (mWidth / candleXDistance / 2);
             float cy = (float) getY(cMinute.getPrice());
-            CrossBean bean = new CrossBean(position * xUnit, cy);
+            CrossBean bean = new CrossBean(xIn, cy);
             bean.y2 = (float) getY(cMinute.getAverage());
             bean.price = cMinute.getPrice() + "";
             bean.time = cMinute.getTime();
@@ -197,7 +237,7 @@ public class FenshiView extends ChartView {
         switch (indexType) {
             case INDEX_VOL:
                 bean.indexText = new String[]{"VOL:" + cMinute.getCount()};
-                bean.indexColor = new int[]{cMinute.getPrice() > yd ? ColorUtil.COLOR_RED : ColorUtil.COLOR_GREEN};
+                bean.indexColor = new int[]{cMinute.getPrice() > yd ? ColorUtil.INCREASING_COLOR : ColorUtil.DECREASING_COLOR};
                 break;
         }
     }
