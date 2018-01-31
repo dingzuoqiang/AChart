@@ -9,6 +9,7 @@ import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 /**
@@ -66,6 +67,60 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
     protected double yMin;
     protected float xUnit;// 每个数据占的宽度 x轴每两点距离
     protected int scale = 2;// 价格 保留2位小数
+
+    //是否可以加载更多,出现这个属性的原因，防止多次加载更多，不可修改
+    protected boolean mCanLoadMore = true;
+
+    /**
+     * 左右拖动思路：这里开始处理分时图的左右移动问题，思路：当手指移动时，会有移动距离（A），我们又有x轴的单位距离(B)，
+     * 所以可以计算出来需要移动的个数（C=A/B,注意向上取整）。
+     * 这个时候，就可以确定新的开始位置（D）和新的结束位置（E）：
+     * D=mBeginIndex±C,E=mEndIndex干C，正负号取决于移动方向。
+     */
+    //手指按下的个数
+    protected int mFingerPressedCount;
+    //是否是向右拉，不可修改
+    protected boolean mPullRight = false;
+    //按下的x轴坐标
+    protected float mPressedX;
+    //按下的时刻
+    protected long mPressTime;
+    //手指移动的类型，默认在最后边
+    protected PullType mPullType = PullType.PULL_RIGHT_STOP;
+
+    //默认情况下结束点距离右边边距
+    protected float mInnerRightBlankPadding = 0;
+    //右侧内边距，默认情况下结束点距离右边边距（单位：sp）
+    protected static final float DEF_INNER_RIGHT_BLANK_PADDING = 0;
+
+    // 注意，遵循取前不取后，因此mEndIndex这个点不应该取到,但是mBeginIndex会取到。
+    //数据开始位置，数据集合的起始位置
+    protected int mBeginIndex = 0;
+    //数据的结束位置，这里之所以定义结束位置，因为数据可能会小于mShownMaxCount。
+    protected int mEndIndex;
+
+    //加载更多阀值。当在左侧不可见范围内还剩多少数据时开始加载更多。（单位：数据个数）
+    protected static final int DEF_MINLEN_LOADMORE = 10;
+
+
+    //事件监听回调
+    protected TimeSharingListener mTimeSharingListener;
+
+    //监听回调
+    public interface TimeSharingListener {
+//        void onLongTouch(Quotes preQuotes, Quotes currentQuotes);
+
+        void onUnLongTouch();
+
+        void needLoadMore();
+    }
+
+    protected enum PullType {
+        PULL_RIGHT,//右->左滑动
+        PULL_LEFT,//左->右滑动
+        PULL_RIGHT_STOP,//滑动到最右边
+        PULL_LEFT_STOP,//滑动到最左边
+    }
 
     public ChartView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -200,4 +255,41 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
         lastX = x;
         lastY = y;
     }
+
+    public void setmTimeSharingListener(TimeSharingListener mTimeSharingListener) {
+        this.mTimeSharingListener = mTimeSharingListener;
+    }
+
+    /**
+     * 加载更多失败，在这里添加逻辑
+     */
+    public void loadMoreError() {
+        mCanLoadMore = true;
+//        Toast.makeText(mContext, "加载更多失败", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 加载更多成功，在这里添加逻辑
+     */
+    public void loadMoreSuccess() {
+        mCanLoadMore = true;
+//        Toast.makeText(getContext(), "加载更多成功", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 正在加载更多，在这里添加逻辑
+     */
+    public void loadMoreIng() {
+        mCanLoadMore = false;
+//        Toast.makeText(mContext, "正在加载更多", Toast.LENGTH_SHORT).show();
+    }
+
+    /**
+     * 没有更多数据，在这里添加逻辑
+     */
+    public void loadMoreNoData() {
+        mCanLoadMore = false;
+//        Toast.makeText(mContext, "加载更多，没有数据了...", Toast.LENGTH_SHORT).show();
+    }
+
 }

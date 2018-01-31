@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.text.Html;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 
@@ -18,13 +19,14 @@ import eat.arvin.com.mychart.utils.GridUtils;
 import eat.arvin.com.mychart.utils.LineUtil;
 import eat.arvin.com.mychart.utils.NumberUtil;
 
+import static android.content.ContentValues.TAG;
+
 /**
  * Created by Administrator on 2016/10/25.
  */
 public class FenshiView extends ChartView {
-    //分时数据
-    private FenshiDataResponse data;
-    //补全后的所有点
+
+    //分时数据的所有点
     private ArrayList<CMinute> minutes;
     //展示的数据
     private ArrayList<CMinute> showList;
@@ -42,7 +44,10 @@ public class FenshiView extends ChartView {
 
     @Override
     protected boolean onViewScroll(MotionEvent e1, MotionEvent e2, float distanceX, float distanceY) {
+        //distanceX 往左滑 正数，，往右滑动 负数
+        Log.e("dingzuo",""+distanceX);
         if(minutes != null && drawCount < minutes.size() && Math.abs(distanceX) > DEFUALT_WIDTH) {
+            moveKView(distanceX);
             int temp = offset + (int)(0 - distanceX / DEFUALT_WIDTH);
             if(temp < 0 || temp + drawCount > minutes.size()) {
 
@@ -85,6 +90,56 @@ public class FenshiView extends ChartView {
             mScaleGestureDetector.onTouchEvent(event);
         return true;
     }
+
+    /**
+     * 移动K线图计算移动的单位和重新计算起始位置和结束位置
+     *
+     * @param moveLen
+     */
+    protected void moveKView(float moveLen) {
+        //移动之前将右侧的内间距值为0
+        mInnerRightBlankPadding = 0;
+
+        mPullRight = moveLen < 0;
+        int moveCount = (int) Math.ceil(Math.abs(moveLen) / xUnit);
+        if (mPullRight) {
+            int len = mBeginIndex - moveCount;
+            if (len < DEF_MINLEN_LOADMORE) {
+                //加载更多
+                if (mTimeSharingListener != null && mCanLoadMore) {
+                    loadMoreIng();
+                    mTimeSharingListener.needLoadMore();
+                }
+            }
+            if (len < 0) {
+                mBeginIndex = 0;
+                mPullType = PullType.PULL_LEFT_STOP;
+                Log.e("dingzuo","滑动到最左边");
+            } else {
+                mBeginIndex = len;
+                mPullType = PullType.PULL_LEFT;
+                Log.e("dingzuo","左->右滑动");
+            }
+        } else {
+            int len = mBeginIndex + moveCount;
+            if (len + drawCount > minutes.size()) {
+                mBeginIndex = minutes.size() - drawCount;
+                //滑动到最右边
+                mPullType = PullType.PULL_RIGHT_STOP;
+                Log.e("dingzuo","滑动到最右边");
+                //重置到之前的状态
+                mInnerRightBlankPadding = DEF_INNER_RIGHT_BLANK_PADDING;
+            } else {
+                mBeginIndex = len;
+                mPullType = PullType.PULL_RIGHT;
+                Log.e("dingzuo","右->左滑动");
+            }
+        }
+        mEndIndex = mBeginIndex + drawCount;
+        //开始位置和结束位置确认好，就可以重绘啦~
+        seekAndCalculateCellData();
+    }
+
 
 
     @Override
@@ -139,15 +194,63 @@ public class FenshiView extends ChartView {
     }
 
     /**
-     * 重新画分时图
-     * @param data
+     * 数据设置入口
+     * @param list
      */
-    public void setDataAndInvalidate(FenshiDataResponse data) {
-        this.data = data;
-        minutes = LineUtil.getAllFenshiData(data);
-        parseData();
+    public void setDataAndInvalidate(ArrayList<CMinute> list) {
+        minutes = list;
+        seekBeginAndEndByNewer();
+        seekAndCalculateCellData();
+    }
 
-        postInvalidate();
+    /**
+     * 加载更多数据
+     *
+     * @param list
+     */
+    public void loadMoreTimeSharingData(ArrayList<CMinute> list) {
+        if (list == null || list.isEmpty()) {
+//            Toast.makeText(mContext, "数据异常", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "loadMoreTimeSharingData: 数据异常");
+            return;
+        }
+        minutes.addAll(0, list);
+
+        //到这里就可以判断，加载更对成功了
+        loadMoreSuccess();
+
+        //特别特别注意，加载更多之后，不应该更新起始位置和结束位置，
+        //因为可能在加载的过程中，原来的意图是在最左边，但是加载完毕后，又不在最左边了。
+        // 因此，只要保持原来的起始位置和结束位置即可。【原来：指的是视觉上的原来】
+        int addSize = list.size();
+        mBeginIndex = mBeginIndex + addSize;
+        if (mBeginIndex + drawCount > minutes.size()) {
+            mBeginIndex = minutes.size() - drawCount;
+        }
+        mEndIndex = mBeginIndex + drawCount;
+        //重新测量一下,这里不能重新测量。因为重新测量的逻辑是寻找最新的点。
+        seekAndCalculateCellData();
+    }
+
+
+    /**
+     * 实时推送过来的数据，实时更新
+     *
+     * @param cMinute
+     */
+    public void pushingTimeSharingData(CMinute cMinute) {
+        if (cMinute == null) {
+//            Toast.makeText(mContext, "数据异常", Toast.LENGTH_SHORT).show();
+            Log.e(TAG, "pushingTimeSharingData: 数据异常");
+            return;
+        }
+        minutes.add(cMinute);
+        //如果是在左右移动，则不去实时更新K线图，但是要把数据加进去
+        if (mPullType == PullType.PULL_RIGHT_STOP) {
+            //Log.e(TAG, "pushingTimeSharingData: 处理实时更新操作...");
+            seekBeginAndEndByNewer();
+            seekAndCalculateCellData();
+        }
     }
 
     /**
@@ -165,17 +268,37 @@ public class FenshiView extends ChartView {
     /**
      * 计算各指标
      */
-    private void parseData() {
-        offset = 0;
+    private void seekAndCalculateCellData() {
+        if (minutes.isEmpty()) return;
+
         //根据当前显示的指标类型，优先计算指标
 //        IndexParseUtil.initSma(this.data);
+        //重绘
+        invalidate();
 
+    }
+
+    /**
+     * 获取最新数据时（包括第一次进来）获取可见数据的开始位置和结束位置。来最新数据或者刚加载的时候，计算开始位置和结束位置。
+     * 特别注意，最新的数据在最后面，所以数据范围应该是[(size-mShownMaxCount)~size)
+     */
+    protected void seekBeginAndEndByNewer() {
+        if (minutes.isEmpty()) return;
+        offset = 0;
+        int size = minutes.size();
+        if (size >= drawCount) {
+            mBeginIndex = size - drawCount;
+            mEndIndex = mBeginIndex + drawCount;
+        } else {
+            mBeginIndex = 0;
+            mEndIndex = mBeginIndex + minutes.size();
+        }
     }
 
 
     @Override
     protected void drawLines(Canvas canvas) {
-        if(data == null) return;
+        if(minutes == null) return;
         drawPriceLine(canvas);
         drawAverageLine(canvas);
     }
