@@ -21,7 +21,7 @@ public class DrawUtils {
     //分时图时间、价格、涨幅文字大小
     public static final float FENSHI_TEXT_SIZE = 26f;
     //时间文字大小
-    public static final float FENSHI_TIME_SIZE = 30f;
+    public static final float FENSHI_TIME_SIZE = 20f;
     //当文字在最上方的时候，需要往下偏移，如高的涨幅
     public static final float FENSHI_TEXT_OFFSET = 25f;
 
@@ -85,7 +85,7 @@ public class DrawUtils {
         paint.setColor(ColorUtil.COLOR_SHADOW);
         paint.setStyle(Paint.Style.FILL);
 //        paint.setShader(mShasder);
-        for(int i = 1; i < points.length / 4; i++) {
+        for(int i = 0; i < points.length / 4; i++) {
             float x1 = points[i * 4];
             float y1 = points[i * 4 + 1];
             float x2 = points[i * 4 + 2];
@@ -298,7 +298,7 @@ public class DrawUtils {
         height = height + 25;
         Paint p = new Paint();
         p.setTextSize(FENSHI_TIME_SIZE);
-        p.setColor(Color.BLACK);
+        p.setColor(ColorUtil.TIME_COLOR);
         p.setTextAlign(Paint.Align.LEFT);
         //左侧日期
         canvas.drawText(leftTime, x1, height, p);
@@ -335,7 +335,7 @@ public class DrawUtils {
         height = height + 25;
         Paint p = new Paint();
         p.setTextSize(FENSHI_TIME_SIZE);
-        p.setColor(Color.BLACK);
+        p.setColor(ColorUtil.TIME_COLOR);
         p.setTextAlign(Paint.Align.LEFT);
         canvas.drawText(s1, 0, height, p);
         p.setTextAlign(Paint.Align.RIGHT);

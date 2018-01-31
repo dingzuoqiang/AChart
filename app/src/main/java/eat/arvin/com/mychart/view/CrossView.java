@@ -96,18 +96,18 @@ public class CrossView extends View {
         //竖线
         canvas.drawLine(bean.x, 0, bean.x, getHeight(), p);
         if (isJunXian) {
-            //均线的时候才画出圆点
-            //画十字线和均线价格线交汇的圆
-            canvas.drawCircle(bean.x, bean.y, 10, p);
-            p.setColor(ColorUtil.COLOR_SMA_LINE);
-            canvas.drawCircle(bean.x, bean.y2, 10, p);
+//            //均线的时候才画出圆点
+//            //画十字线和均线价格线交汇的圆
+//            canvas.drawCircle(bean.x, bean.y, 10, p);
+//            p.setColor(ColorUtil.COLOR_SMA_LINE);
+//            canvas.drawCircle(bean.x, bean.y2, 10, p);
         }
         p.setColor(Color.BLACK);
         p.setTextSize(32f);
         //1, 写价格(竖线靠左时，价格需要写到右边)
-        drawPriceTextWithRect(canvas, bean.x, bean.y, bean.price, p);
+//        drawPriceTextWithRect(canvas, bean.x, bean.y, bean.price, p);
         //2, 写时间
-        drawTimeTextWithRect(canvas, bean.x, bean.getTime(), p);
+//        drawTimeTextWithRect(canvas, bean.x, bean.getTime(), p);
         //3，写指标的文字
         drawIndexTexts(canvas);
         p.reset();

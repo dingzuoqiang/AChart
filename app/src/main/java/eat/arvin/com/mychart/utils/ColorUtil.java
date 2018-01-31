@@ -16,8 +16,10 @@ public class ColorUtil {
 //    <color name="chart_no_data_color">#be945c</color>
 //    <color name="highlight_color">#be945c</color>
 
+    // 坐标轴 时间 颜色
+    public static final int TIME_COLOR = Color.parseColor("#999999");
     // 坐标轴 lable 颜色
-    public static final int AXIS_COLOR = Color.parseColor("#999999");
+    public static final int AXIS_COLOR = Color.parseColor("#E1E1E1");
     // 中间 极限线
     public static final int LIMIT_COLOR = Color.parseColor("#AFAFAF");
     // 阴影层

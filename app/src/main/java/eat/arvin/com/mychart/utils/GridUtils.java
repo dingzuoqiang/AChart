@@ -99,7 +99,7 @@ public class GridUtils {
         Paint p = new Paint();
         p.setStyle(Paint.Style.STROKE);
         p.setPathEffect(new DashPathEffect(new float[]{20, 20, 20, 20}, 0));
-        p.setColor(Color.GRAY);
+        p.setColor(ColorUtil.COLOR_SHADOW);
         p.setAntiAlias(true);
 //        //横虚线
 //        canvas.drawLine(0, y + height / 2, width, y + height / 2, p);
@@ -107,7 +107,7 @@ public class GridUtils {
 //        canvas.drawLine(width * 3 / 4, y, width * 3 / 4, y + height, p);
 //        canvas.drawLine(width * 1 / 4, y, width * 1 / 4, y + height, p);
         p.reset();
-        p.setColor(Color.GRAY);
+        p.setColor(ColorUtil.AXIS_COLOR);
 //        //中间实线
 //        canvas.drawLine(width * 2 / 4, y, width * 2 / 4, y + height, p);
         //四周线
