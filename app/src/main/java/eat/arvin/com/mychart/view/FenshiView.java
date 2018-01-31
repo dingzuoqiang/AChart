@@ -275,7 +275,7 @@ public class FenshiView extends ChartView {
 //        IndexParseUtil.initSma(this.data);
         //重绘
         invalidate();
-
+        resetIndexText();
     }
 
     /**

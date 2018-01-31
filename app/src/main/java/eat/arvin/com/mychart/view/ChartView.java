@@ -102,7 +102,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
     //加载更多阀值。当在左侧不可见范围内还剩多少数据时开始加载更多。（单位：数据个数）
     protected static final int DEF_MINLEN_LOADMORE = 10;
 
-
     //事件监听回调
     protected TimeSharingListener mTimeSharingListener;
 
@@ -265,7 +264,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
      */
     public void loadMoreError() {
         mCanLoadMore = true;
-//        Toast.makeText(mContext, "加载更多失败", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -273,7 +271,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
      */
     public void loadMoreSuccess() {
         mCanLoadMore = true;
-//        Toast.makeText(getContext(), "加载更多成功", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -281,7 +278,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
      */
     public void loadMoreIng() {
         mCanLoadMore = false;
-//        Toast.makeText(mContext, "正在加载更多", Toast.LENGTH_SHORT).show();
     }
 
     /**
@@ -289,7 +285,6 @@ public abstract class ChartView extends View implements ChartConstant, CrossView
      */
     public void loadMoreNoData() {
         mCanLoadMore = false;
-//        Toast.makeText(mContext, "加载更多，没有数据了...", Toast.LENGTH_SHORT).show();
     }
 
 }
